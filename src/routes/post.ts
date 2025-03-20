@@ -1,11 +1,12 @@
 import { Router, Request, Response } from 'express';
-import { Users } from '../db/schemas';
+import { Posts, Users } from '../db/schemas';
 import { drizzle } from 'drizzle-orm/vercel-postgres';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { eq, or } from 'drizzle-orm';
 import validator from '../middlewares/validator';
 import { login, register } from '../schemas/post';
+import { auth } from '../middlewares/authenticator';
 
 const router = Router();
 const db = drizzle();
@@ -54,6 +55,21 @@ router.post('/login', validator(login), async (req: Request, res: Response) => {
 	});
 
 	res.status(200).send(token);
+});
+
+router.post('/post', auth, async (req: Request, res: Response) => {
+	if (!req.user) {
+		res.status(500).send('An error occured while deleting the user');
+		return;
+	}
+
+	const post: typeof Posts.$inferInsert = {
+		post: req.body.post,
+		userId: req.user.id,
+	};
+
+	await db.insert(Posts).values(post);
+	res.status(201).send('Success');
 });
 
 export default router;

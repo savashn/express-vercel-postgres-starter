@@ -2,14 +2,14 @@ import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
 interface DecodedToken {
-	id: string;
+	id: number;
 	user: string;
 }
 
 declare module 'express-serve-static-core' {
 	interface Request {
 		user?: {
-			id: string;
+			id: number;
 			user: string;
 		};
 	}
