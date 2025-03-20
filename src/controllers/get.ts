@@ -5,12 +5,8 @@ import { eq } from 'drizzle-orm';
 
 const db = drizzle();
 
-export const helloWorld = async (
-	req: Request,
-	res: Response
-): Promise<void> => {
+export const helloWorld = (req: Request, res: Response): void => {
 	res.status(200).send('Hello World');
-	return;
 };
 
 export const users = async (req: Request, res: Response): Promise<void> => {
