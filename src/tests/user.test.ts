@@ -48,14 +48,19 @@ describe('Create a user, login, return and delete.', () => {
 			newPassword: 'testuserpasswordnew'
 		};
 
-		const res = await request(app).put('/put/password').set('x-auth-token', testAuthToken).send(data);
+		const res = await request(app)
+			.put('/put/password')
+			.set('x-auth-token', testAuthToken)
+			.send(data);
 
 		expect(res.status).toBe(200);
 		expect(res.text).toEqual('Password updated successfully');
 	});
 
 	it('Should delete the user created in test', async () => {
-		const res = await request(app).delete('/delete/user/testuser').set('x-auth-token', testAuthToken);
+		const res = await request(app)
+			.delete('/delete/user/testuser')
+			.set('x-auth-token', testAuthToken);
 
 		expect(res.status).toBe(204);
 	});

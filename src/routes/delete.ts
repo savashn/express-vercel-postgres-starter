@@ -8,7 +8,10 @@ const router = Router();
 const db = drizzle();
 
 router.delete('/user/:username', auth, async (req: Request, res: Response) => {
-	const deleted = await db.delete(Users).where(eq(Users.username, req.params.username)).returning();
+	const deleted = await db
+		.delete(Users)
+		.where(eq(Users.username, req.params.username))
+		.returning();
 
 	if (deleted.length === 0) {
 		res.status(500).send('An error occured while deleting the user');

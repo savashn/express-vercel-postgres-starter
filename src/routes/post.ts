@@ -11,30 +11,31 @@ import { auth } from '../middlewares/authenticator';
 const router = Router();
 const db = drizzle();
 
-router.post('/register', validator(register), async (req: Request, res: Response) => {
-	const hashedPassword = await bcrypt.hash(req.body.password, 10);
+router.post(
+	'/register',
+	validator(register),
+	async (req: Request, res: Response) => {
+		const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-	const user: typeof Users.$inferInsert = {
-		name: req.body.name,
-		username: req.body.username,
-		email: req.body.email,
-		password: hashedPassword
-	};
+		const user: typeof Users.$inferInsert = {
+			name: req.body.name,
+			username: req.body.username,
+			email: req.body.email,
+			password: hashedPassword
+		};
 
-	await db.insert(Users).values(user);
+		await db.insert(Users).values(user);
 
-	res.status(201).send('Success');
-});
+		res.status(201).send('Success');
+	}
+);
 
 router.post('/login', validator(login), async (req: Request, res: Response) => {
 	const user = await db
 		.select()
 		.from(Users)
 		.where(
-			or(
-				eq(Users.username, req.body.user),
-				eq(Users.email, req.body.user)
-			)
+			or(eq(Users.username, req.body.user), eq(Users.email, req.body.user))
 		)
 		.limit(1);
 
@@ -50,9 +51,13 @@ router.post('/login', validator(login), async (req: Request, res: Response) => {
 		return;
 	}
 
-	const token: string = jwt.sign({ id: user[0].id, user: user[0].username }, process.env.JWT_SECRET as string, {
-		expiresIn: '1d'
-	});
+	const token: string = jwt.sign(
+		{ id: user[0].id, user: user[0].username },
+		process.env.JWT_SECRET as string,
+		{
+			expiresIn: '1d'
+		}
+	);
 
 	res.status(200).send(token);
 });
@@ -65,7 +70,7 @@ router.post('/post', auth, async (req: Request, res: Response) => {
 
 	const post: typeof Posts.$inferInsert = {
 		post: req.body.post,
-		userId: req.user.id,
+		userId: req.user.id
 	};
 
 	await db.insert(Posts).values(post);
