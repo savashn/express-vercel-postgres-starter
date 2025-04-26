@@ -1,14 +1,14 @@
-## express-vercel-postgres-stack
+## express-vercel-postgres-starter
 
-A boilerplate to build serverless API's on Vercel with Express, TypeScript and PostgreSQL.
+A starter kit to build serverless APIs on Vercel with Express, TypeScript and Drizzle.
 
 ## Installation
 
 ### 0. Clone this repository and install all dependencies
 
 ```sh
-git clone https://github.com/savashn/express-vercel-postgres-stack.git
-cd express-vercel-postgres-stack
+git clone https://github.com/savashn/express-vercel-postgres-starter.git
+cd express-vercel-postgres-starter
 npm install
 ```
 
